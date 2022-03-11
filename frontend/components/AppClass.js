@@ -16,7 +16,11 @@ export default class AppClass extends React.Component {
   moveActiveSquare = ( direction ) =>{
     const { grid } = this.state
     const directions = [-1,-3,1,3]
-    if(!isAvailableMove(grid,directions[direction])) return 
+    const errorMessages = ["You can't go left","You can't go up","You can't go right","You can't go down"]
+    if(!isAvailableMove(grid,directions[direction])){
+      this.setMessage(errorMessages[direction])
+      return
+    } 
     this.setState({
       ...this.state,
       moveCount : this.state.moveCount + 1,
@@ -32,7 +36,14 @@ export default class AppClass extends React.Component {
   }
 
   resetGrid = ()=>{
-    this.setState({...this.state,grid:4,moveCount:0})
+    this.setState({...this.state,grid:4,moveCount:0,emailInput:'',message:''})
+    }
+
+  resetEmail = ()=>{
+    this.setState({
+      ...this.state,
+      emailInput:''
+    })
   }
 
   onChange = (evt) =>{
@@ -50,7 +61,7 @@ export default class AppClass extends React.Component {
       <div id="wrapper" className={className}>
         <div className="info">
           <h3 id="coordinates">Coordinates ({x},{y})</h3>
-          <h3 id="steps">You moved {moveCount} times</h3>
+          <h3 id="steps">You moved {moveCount === 1 ? `1 time` : `${moveCount} times`}</h3>
         </div>
         <div id="grid">
           {renderGrid(this.state.grid)}
@@ -67,7 +78,7 @@ export default class AppClass extends React.Component {
         </div>
         <form>
           <input onChange={this.onChange} value={emailInput} id="email" type="email" placeholder="type email"></input>
-          <input onClick={(evt)=>postUserData(evt,this.state,this.setMessage)} id="submit" type="submit"></input>
+          <input onClick={(evt)=>{postUserData(evt,this.state,this.setMessage);this.resetEmail();}} id="submit" type="submit"></input>
         </form>
       </div>
     )

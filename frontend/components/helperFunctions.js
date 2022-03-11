@@ -19,7 +19,6 @@ const isAvailableMove = (grid,direction) => {
 
 const postUserData = (evt,state,setMessage) => {
   evt.preventDefault()
-  console.log(evt,state,setMessage)
   axios.post(URL,
     {
       x:get1Based2DIndex(state.grid)[0],
